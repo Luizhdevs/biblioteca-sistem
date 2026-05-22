@@ -1,6 +1,7 @@
 from psycopg2.pool import ThreadedConnectionPool
 from psycopg2.extras import RealDictCursor
 from contextlib import contextmanager
+from urllib.parse import urlparse, unquote
 from dotenv import load_dotenv
 import os
 
@@ -12,15 +13,18 @@ _pool: ThreadedConnectionPool | None = None
 def get_pool() -> ThreadedConnectionPool:
     global _pool
     if _pool is None:
-        # Supabase / Render fornecem DATABASE_URL; variáveis individuais para local
         database_url = os.getenv("DATABASE_URL")
         if database_url:
-            if "sslmode" not in database_url:
-                database_url += ("&" if "?" in database_url else "?") + "sslmode=require"
+            p = urlparse(database_url)
             _pool = ThreadedConnectionPool(
                 minconn=1,
                 maxconn=10,
-                dsn=database_url,
+                host=p.hostname,
+                port=p.port or 5432,
+                dbname=p.path.lstrip("/"),
+                user=unquote(p.username),
+                password=unquote(p.password),
+                sslmode="require",
             )
         else:
             _pool = ThreadedConnectionPool(
