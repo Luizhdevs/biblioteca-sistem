@@ -62,8 +62,10 @@ body {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.7);
   z-index: 149;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }
 
 /* ── Sidebar ── */
@@ -333,15 +335,27 @@ body {
   .mobile-topbar { display: flex; }
   .sidebar-brand { display: none; }
 
-  /* Sidebar: slide off-screen by default */
+  /* Sidebar: abaixo da topbar, fora da tela por padrão */
   .sidebar {
-    top: 0;
+    top: var(--topbar-h);
+    height: calc(100vh - var(--topbar-h));
     transform: translateX(-100%);
+    box-shadow: none;
+    width: 80vw;
+    max-width: 300px;
   }
 
   /* Open state */
-  .sidebar-open .sidebar { transform: translateX(0); }
+  .sidebar-open .sidebar {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0,0,0,.4);
+  }
   .sidebar-open .sidebar-overlay { display: block; }
+
+  /* Overlay começa abaixo da topbar */
+  .sidebar-open .sidebar-overlay {
+    top: var(--topbar-h);
+  }
 
   /* Main content fills full width, offset for topbar */
   .main-content {

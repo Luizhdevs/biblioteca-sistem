@@ -69,10 +69,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 
 const sidebarOpen = ref(false)
+
+watch(sidebarOpen, (val) => {
+  document.body.style.overflow = val ? 'hidden' : ''
+})
 
 function closeSidebar() {
   sidebarOpen.value = false
