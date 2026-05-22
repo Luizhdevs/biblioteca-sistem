@@ -21,7 +21,6 @@ def get_pool() -> ThreadedConnectionPool:
                 minconn=1,
                 maxconn=10,
                 dsn=database_url,
-                options=f"-c search_path={os.getenv('DB_SCHEMA', 'biblioteca')}",
             )
         else:
             _pool = ThreadedConnectionPool(
@@ -53,6 +52,8 @@ def get_conn():
 
 @contextmanager
 def get_cursor():
+    schema = os.getenv("DB_SCHEMA", "biblioteca")
     with get_conn() as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(f"SET search_path TO {schema}")
             yield cur
