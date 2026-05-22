@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="page-body">
-      <div class="d-flex gap-2 mb-3">
+      <div class="d-flex gap-2 mb-3 flex-wrap">
         <input v-model="search" @input="load" class="form-control search-bar"
           placeholder="Buscar por nome, CPF ou e-mail..." />
       </div>

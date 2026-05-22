@@ -9,7 +9,7 @@
     <div class="page-body">
 
       <!-- Search + Filter -->
-      <div class="d-flex gap-2 mb-3">
+      <div class="d-flex gap-2 mb-3 flex-wrap">
         <input v-model="search" @input="loadLivros" class="form-control search-bar"
           placeholder="Buscar por título, ISBN ou gênero..." />
       </div>
