@@ -40,3 +40,15 @@ app.include_router(relatorios.router,   prefix="/relatorios",   tags=["Relatóri
 @app.get("/")
 def root():
     return {"message": "Biblioteca API v1.0"}
+
+
+@app.get("/health")
+def health():
+    import os
+    try:
+        from database import get_cursor
+        with get_cursor() as cur:
+            cur.execute("SELECT 1")
+        return {"status": "ok", "db": "connected"}
+    except Exception as e:
+        return {"status": "error", "detail": str(e), "db_url_set": bool(os.getenv("DATABASE_URL"))}

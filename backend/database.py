@@ -15,6 +15,8 @@ def get_pool() -> ThreadedConnectionPool:
         # Supabase / Render fornecem DATABASE_URL; variáveis individuais para local
         database_url = os.getenv("DATABASE_URL")
         if database_url:
+            if "sslmode" not in database_url:
+                database_url += ("&" if "?" in database_url else "?") + "sslmode=require"
             _pool = ThreadedConnectionPool(
                 minconn=1,
                 maxconn=10,
